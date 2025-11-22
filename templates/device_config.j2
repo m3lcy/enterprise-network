@@ -92,26 +92,26 @@ interface {{ intf.name }}
     {% endif %}
   {% endif %}
 		{% if intf.native_vlan is defined %}
-						switchport trunk native vlan {{ intf.native_vlan }}
+				switchport trunk native vlan {{ intf.native_vlan }}
 		{% endif %}
 		{% if intf.access_vlan is defined %}
-						switchport access vlan {{ intf.access_vlan }}
+				switchport access vlan {{ intf.access_vlan }}
 		{% endif %}
 		{% if intf.ip_address is defined and intf.subnet_mask is defined %}
-						ip address {{ intf.ip_address }} {{ intf.subnet_mask }}
+				ip address {{ intf.ip_address }} {{ intf.subnet_mask }}
 		{% endif %}
 		{% if intf.duplex is defined %}
-						duplex {{ intf.duplex }}
+				duplex {{ intf.duplex }}
 		{% endif %}
 		{% if intf.speed is defined %}
-						speed {{ intf.speed }}
+				speed {{ intf.speed }}
 		{% endif %}
 		{% if intf.shutdown is defined %}
-						{% if intf.shutdown == true %}
-						shutdown
-						{% else %}
-						no shutdown
-						{% endif %}
+        {% if intf.shutdown == true %}
+        shutdown
+        {% else %}
+        no shutdown
+        {% endif %}
 		{% endif %}
   {% if intf.port_security is defined %}
     switchport port-security
