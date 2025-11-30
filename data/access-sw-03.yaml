@@ -1,4 +1,4 @@
-hostname: "access-sw-01"
+hostname: "access-sw-03"
 
 line_vty:
   range: 0 4

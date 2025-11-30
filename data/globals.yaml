@@ -1,8 +1,8 @@
-banner: "Authorized Access Only!!!"
+banner: "zAuthorized Access Only!!!z"
 
 service_password_encryption: true
 
-ip_routing: true
+ip_routing: false
 
 domain:
   lookup: false
