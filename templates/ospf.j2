@@ -1,0 +1,14 @@
+{# jinja2: trim_blocks=True, lstrip_blocks=True #}
+
+{% if routing is defined %}
+{% if routing.ospf is defined %}
+router ospf {{ routing.ospf.process_id }}
+ router-id {{ routing.ospf.router_id }}
+{% endif %}
+ {% if routing.ospf.log_adjacency_changes is defined and routing.ospf.log_adjacency_changes == true %}
+ log-adjacency-changes
+ {% endif %}
+ {% for net in routing.ospf.networks %}
+ network {{ net.network }} {{ net.wildcard }} area {{ net.area }}
+ {% endfor %}
+{% endif %}

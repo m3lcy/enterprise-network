@@ -1,0 +1,13 @@
+{# jinja2: trim_blocks=True, lstrip_blocks=True #}
+
+{% if vtp is defined %}
+{% if vtp.mode is defined %}
+vtp mode {{ vtp.mode }}
+{% endif %}
+{% if vtp.domain is defined %}
+vtp domain {{ vtp.domain }}
+{% endif %}
+{% if vtp.version is defined %}
+vtp version {{ vtp.version }}
+{% endif %}
+{% endif %}

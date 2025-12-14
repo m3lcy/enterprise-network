@@ -1,0 +1,14 @@
+{# jinja2: trim_blocks=True, lstrip_blocks=True #}
+
+{% if routing is defined and routing.access_lists is defined %}
+{% for acl in routing.access_lists %}
+ip access-list {{ acl.type }} {{ acl.name }}
+ {% for rule in acl.rules %}
+ {% if rule.permit is defined %}
+ permit {{ rule.permit }} {{ rule.src }} {{ rule.wildcard }} {{ rule.dest | default('any') }}
+ {% elif rule.deny is defined %}
+ deny {{ rule.deny }} {{ rule.src }} {{ rule.wildcard }} {{ rule.dest | default('any') }}
+ {% endif %}
+ {% endfor %}
+{% endfor %}
+{% endif %}

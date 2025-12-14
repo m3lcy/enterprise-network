@@ -1,0 +1,14 @@
+{# jinja2: trim_blocks=True, lstrip_blocks=True #}
+
+{% if line_vty is defined %}
+line vty {{ line_vty.range | default('0 4') }}
+ {% if line_vty.password is defined %}
+ password {{ line_vty.password }}
+ {% endif %}
+ {% if line_vty.login is defined %}
+ login {{ line_vty.login }}
+ {% endif %}
+ {% if line_vty.transport_input is defined %}
+ transport input {{ line_vty.transport_input }}
+ {% endif %}
+{% endif %}

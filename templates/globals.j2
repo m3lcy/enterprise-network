@@ -1,0 +1,27 @@
+{# jinja2: trim_blocks=True, lstrip_blocks=True #}
+
+hostname {{ hostname }}
+
+enable secret {{ my_enable_secret }}
+
+username {{ my_admin_username }} privilege 15 secret {{ my_admin_secret }}
+
+{% if banner is defined %}
+banner motd {{ banner }}
+{% endif %}
+
+{% if service_password_encryption is defined and service_password_encryption %}
+service password-encryption
+{% endif %}
+
+{% if domain is defined and domain.name is defined and domain.lookup is defined and domain.lookup == false %}
+ip domain-name {{ domain.name }}
+{% endif %}
+
+{% if crypto_rsa_key is defined %}
+{{ crypto_rsa_key }}
+{% endif %}
+
+{% if ip_routing is defined and ip_routing == true %}
+ip routing
+{% endif %}

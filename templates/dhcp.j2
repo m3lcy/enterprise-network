@@ -1,0 +1,14 @@
+{# jinja2: trim_blocks=True, lstrip_blocks=True #}
+
+{% if dhcp is defined %}
+{% for pool in dhcp.pools %}
+ip dhcp pool VLAN{{ pool.vlan }}
+ network {{ pool.network }} {{ pool.subnet_mask }}
+ default-router {{ pool.default_router }}
+{% endfor %}
+{% if dhcp.excluded_addresses is defined %}
+{% for excl in dhcp.excluded_addresses %}
+ip dhcp excluded-address {{ excl.start }} {{ excl.end }}
+{% endfor %}
+{% endif %}
+{% endif %}

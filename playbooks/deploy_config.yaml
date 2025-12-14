@@ -1,6 +1,7 @@
 - name: Render and deploy device configs
   hosts: routers,l3_switches,access_switches
   gather_facts: no
+  connection: network_cli
   vars_files:
     - ../data/globals.yaml
 
@@ -8,7 +9,6 @@
     output_dir: "{{ playbook_dir }}/../outputs/{{ inventory_hostname }}"
     log_dir: "{{ playbook_dir }}/../logs"
     log_file: "{{ log_dir }}/{{ inventory_hostname }}.log"
-    timestamp: "{{ lookup('pipe', 'date +%Y%m%d_%H%M%S') }}"
 
   pre_tasks:
     - name: Load host-specific variables
@@ -31,9 +31,14 @@
 
   tasks:
     - block:
+
+        - name: Set timestamp per host
+          ansible.builtin.set_fact:
+            timestamp: "{{ lookup('pipe', 'date +%Y%m%d_%H%M%S') }}"
+
         - name: Render config template to file
           ansible.builtin.template:
-            src:  "{{ playbook_dir }}/../templates/device_config.j2"
+            src:  "{{ playbook_dir }}/../templates/call_templates.j2"
             dest: "{{ output_dir }}/config_{{ timestamp }}.cfg"
             backup: yes
           register: render_result
@@ -52,9 +57,10 @@
 
         - name: Push config to device
           cisco.ios.ios_config:
-            lines: "{{ lookup('template', '../templates/device_config.j2') }}"
+            src: "{{ render_result.dest }}"
             backup: yes
             diff_against: running
+          register: push_result
 
         - name: Log push success
           ansible.builtin.lineinfile:

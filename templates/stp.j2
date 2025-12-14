@@ -1,0 +1,10 @@
+{# jinja2: trim_blocks=True, lstrip_blocks=True #}
+
+{% if stp is defined %}
+{% if stp.mode is defined %}
+spanning-tree mode {{ stp.mode }}
+{% endif %}
+{% if stp.vlans is defined and stp.priority is defined %}
+spanning-tree vlan {{ stp.vlans }} priority {{ stp.priority }}
+{% endif %}
+{% endif %}

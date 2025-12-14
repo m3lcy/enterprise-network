@@ -1,0 +1,8 @@
+{# jinja2: trim_blocks=True, lstrip_blocks=True #}
+
+{% if vlans is defined %}
+{% for vlan in vlans %}
+vlan {{ vlan.id | default('1') }}
+ name {{ vlan.name | default('DEFAULT') }}
+{% endfor %}
+{% endif %}

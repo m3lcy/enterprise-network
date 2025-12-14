@@ -1,0 +1,88 @@
+{# jinja2: trim_blocks=True, lstrip_blocks=True #}
+
+{% if interfaces is defined %}
+{% for intf in interfaces %}
+{% set is_range = '-' in intf.name and intf.name[:2] in ['Fa','Gi','Te','Fo'] %}
+{% if is_range %}
+interface range {{ intf.name }}
+{% else %}
+interface {{ intf.name }}
+{% endif %}
+
+ {% if intf.mode is defined %}
+ {% if intf.mode == 'routed' %}
+ no switchport
+ {% elif intf.mode == 'trunk' %}
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ {% elif intf.mode == 'access' %}
+ switchport mode access
+ {% endif %}
+ {% endif %}
+
+ {% if intf.native_vlan is defined %}
+ switchport trunk native vlan {{ intf.native_vlan }}
+ {% endif %}
+ {% if intf.access_vlan is defined %}
+ switchport access vlan {{ intf.access_vlan }}
+ {% endif %}
+
+ {% if intf.ip_address is defined and intf.subnet_mask is defined %}
+ ip address {{ intf.ip_address }} {{ intf.subnet_mask }}
+ {% endif %}
+
+ {% if intf.shutdown is defined %}
+ {% if intf.shutdown %}
+ shutdown
+ {% else %}
+ no shutdown
+ {% endif %}
+ {% endif %}
+
+ {% if intf.port_security is defined %}
+ switchport port-security
+ {% if intf.port_security.maximum is defined %}
+ switchport port-security maximum {{ intf.port_security.maximum }}
+ {% endif %}
+ {% if intf.port_security.violation is defined %}
+ switchport port-security violation {{ intf.port_security.violation }}
+ {% endif %}
+ {% if intf.port_security.sticky is defined and intf.port_security.sticky %}
+ switchport port-security mac-address sticky
+ {% endif %}
+ {% endif %}
+
+ {% if intf.helper_address is defined %}
+ ip helper-address {{ intf.helper_address }}
+ {% endif %}
+
+ {% if intf.nat_inside is defined and intf.nat_inside %}
+ ip nat inside
+ {% endif %}
+
+ {% if intf.hsrp is defined %}
+ {% if intf.hsrp.group is defined and intf.hsrp.ip is defined %}
+ standby {{ intf.hsrp.group }} ip {{ intf.hsrp.ip }}
+ {% endif %}
+ {% if intf.hsrp.version is defined %}
+ standby version {{ intf.hsrp.version }}
+ {% endif %}
+ {% if intf.hsrp.priority is defined and intf.hsrp.group is defined %}
+ standby {{ intf.hsrp.group }} priority {{ intf.hsrp.priority }}
+ {% endif %}
+ {% if intf.hsrp.preempt is defined and intf.hsrp.preempt %}
+ standby {{ intf.hsrp.group }} preempt
+ {% endif %}
+ {% endif %}
+
+ {% if intf.mls_qos_cos is defined %}
+ mls qos cos {{ intf.mls_qos_cos }}
+ {% endif %}
+ {% if intf.service_policy_input is defined %}
+ service-policy input {{ intf.service_policy_input }}
+ {% endif %}
+ {% if intf.service_policy_output is defined %}
+ service-policy output {{ intf.service_policy_output }}
+ {% endif %}
+{% endfor %}
+{% endif %}

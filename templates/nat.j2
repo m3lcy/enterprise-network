@@ -1,0 +1,5 @@
+{# jinja2: trim_blocks=True, lstrip_blocks=True #}
+
+{% if nat is defined and nat.inside_source_overload is defined %}
+ip nat inside source list {{ nat.inside_source_overload.access_list }} interface {{ nat.inside_source_overload.interface }} overload
+{% endif %}
