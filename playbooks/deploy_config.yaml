@@ -9,6 +9,7 @@
     output_dir: "{{ playbook_dir }}/../outputs/{{ inventory_hostname }}"
     log_dir: "{{ playbook_dir }}/../logs"
     log_file: "{{ log_dir }}/{{ inventory_hostname }}.log"
+    deploy_mode: "{{ mode | default('dry-run') }}"
 
   pre_tasks:
     - name: Load host-specific variables
@@ -28,6 +29,23 @@
         path: "{{ log_dir }}"
         state: directory
         mode: '0755'
+
+    - name: Validate mode
+      ansible.builtin.fail:
+        msg: "Invalid mode '{{ deploy_mode }}'. Must be 'dry-run' or 'commit'."
+      when: deploy_mode not in ['dry-run', 'commit']
+
+    - name: Enforce safe default - block accidental applies
+      ansible.builtin.fail:
+        msg: |
+          UNSAFE EXECUTION BLOCKED
+
+          To preview changes (recommended):
+            ansible-playbook ... --check --diff --limit <host>
+
+          To actually apply and save changes:
+            ansible-playbook ... --extra-vars "deploy_mode=commit" --diff --limit <host>
+      when: not ansible_check_mode and deploy_mode != 'commit'
 
   tasks:
     - block:
@@ -55,17 +73,23 @@
             create: true
             insertafter: EOF
 
-        - name: Push config to device
+        - name: Preview or Push config to device
           cisco.ios.ios_config:
             src: "{{ render_result.dest }}"
             backup: yes
             diff_against: running
+            save_when: "{{ 'modified' if deploy_mode == 'commit' else 'never' }}"
           register: push_result
 
-        - name: Log push success
+        - name: Display diff for review 
+          ansible.builtin.debug:
+            msg: "{{ push_result.diff }} | default('No differences detected')"
+          when: ansible_check_mode
+
+        - name: Log Push/Preview result
           ansible.builtin.lineinfile:
             path: "{{ log_file }}"
-            line: "[{{ timestamp }}] Pushed config to {{ inventory_hostname }}"
+            line: "[{{ timestamp }}] {{ 'Previewed (dry-run)' if deploy_mode == 'dry-run' else 'Pushed and Committed' }} config to {{ inventory_hostname }}"
             create: true
             insertafter: EOF
 
@@ -74,7 +98,7 @@
           ansible.builtin.lineinfile:
             path: "{{ log_file }}"
             line: >-
-              [{{ timestamp }}] Failed to render or push config for {{ inventory_hostname }}:
+              [{{ timestamp }}] Failed to render or {{ 'preview' if deploy_mode == 'dry-run' else 'push/commit' }} config for {{ inventory_hostname }}:
               {{ render_result.msg | default('Render not attempted') }},
               {{ push_result.msg | default('Push not attempted') }}
             create: true
@@ -84,6 +108,6 @@
         - name: Log task completion
           ansible.builtin.lineinfile:
             path: "{{ log_file }}"
-            line: "[{{ timestamp }}] Task finished for {{ inventory_hostname }}"
+            line: "[{{ timestamp }}] Task finished for {{ inventory_hostname }} (mode: {{ deploy_mode }})"
             create: true
             insertafter: EOF
