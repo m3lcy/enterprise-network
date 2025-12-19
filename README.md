@@ -70,7 +70,7 @@ cd Enterprise-Network
 ## (Optional) Create a Python virtual environment
 ```bash
 python3 -m venv venv && source venv/bin/activate  
-pip install ansible
+pip install ansible ansible-pylibssh
 ```
 
 # Usage
