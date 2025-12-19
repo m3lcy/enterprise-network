@@ -39,13 +39,51 @@ This network is designed to ensure continuous connectivity between the branch of
 - Automated logging and configuration deployment allow the network to be managed efficiently while preventing errors from manual configuration. <br/>
 
 **Security & Management** <br/>
-- ACLs, SSH, VTP, NAT, and firewalls are used to enforce security and external access. <br/>
+- ACLs, SSH, VTP, NAT, Port Security etc. are used to enforce security and external access. <br/>
+- All sensitive credentials (device passwords, enable secret etc.) are encrypted using **Ansible Vault**.
 
 **Future-Proof Design** <br/>
 - VLAN segmentation, distributed routing, loop-prevention, and security policies enable scalable growth.
 - Supports evolving workloads and additional research teams without performance compromise. <br/>
 
 ##
+
+```bash
+Enterprise-Network/
+├── CiscoIOS/          → Backups of current running-configs
+├── data/              → Host devices YAML data configurations
+├── inventory/         → Ansible inventory and host_vars (encrypted ansible vault)
+├── logs/              → Per-device and run logs
+├── outputs/           → Timestamped rendered configurations
+├── playbooks/         → Deployment playbook
+├── templates/         → Modular Jinja2 templates
+```
+
+# Setup
+
+## Clone and Setup
+```bash
+git clone git@github.com:m3lcy/Enterprise-Network.git
+cd Enterprise-Network
+```
+
+## (Optional) Create a Python virtual environment
+```bash
+python3 -m venv venv && source venv/bin/activate  
+pip install ansible
+```
+
+# Usage
+
+## Preview/Dry-run 
+```bash
+ansible-playbook playbooks/deploy_config.yaml -i inventory/hosts.yaml --check --diff --limit l3-sw-01 --ask-vault-pass
+```
+
+## Commit/Apply
+```bash
+ansible-playbook playbooks/deploy_config.yaml -i inventory/hosts.yaml --extra-vars "deploy_mode=commit" --diff --limit l3-sw-01 --ask-vault-pass
+```
 
 **TechStack** <br/>
 **Ansible**, **Jinja2**, **YAML**, **OSPF**, **DHCP**, **QOS**, **VLANS**, **HSRP**, **NAT**, **Port Security**, **RIP**, **ACLs**, **STP**, **VTP**, **SSH**
