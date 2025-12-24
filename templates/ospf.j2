@@ -5,8 +5,16 @@
 router ospf {{ routing.ospf.process_id }}
  router-id {{ routing.ospf.router_id }}
 {% endif %}
- {% if routing.ospf.log_adjacency_changes is defined and routing.ospf.log_adjacency_changes == true %}
- log-adjacency-changes
+ {% if routing.ospf.passive_interfaces.default is defined and routing.ospf.passive_interfaces.default %}
+ passive-interface default
+ {% endif %}
+ {% if routing.ospf.passive_interfaces.except is defined and routing.ospf.passive_interfaces.except%}
+ {% for intf in routing.ospf.passive_interfaces.except | default([]) %}
+ no passive-interface {{ intf }}
+ {% endfor %}
+ {% endif %}
+ {% if routing.ospf.default_information_originate is defined and routing.ospf.default_information_originate == true %}
+ default-information originate
  {% endif %}
  {% for net in routing.ospf.networks %}
  network {{ net.network }} {{ net.wildcard }} area {{ net.area }}

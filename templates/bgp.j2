@@ -1,0 +1,21 @@
+{# jinja2: trim_blocks=True, lstrip_blocks=True #}
+
+{% if routing is defined and routing.bgp is defined %}
+router bgp {{ routing.bgp.as_number }}
+ {% if routing.bgp.neighbors is defined %}
+ {% for n in routing.bgp.neighbors %}
+ neighbor {{ n.ip }} remote-as {{ n.remote_as }}
+ {% if n.update_source is defined %}
+ neighbor {{ n.ip }} update-source {{ n.update_source }}
+ {% endif %}
+ {% if n.multi_hop is defined %}
+ neighbor {{ n.ip }} ebgp-multihop {{ n.multi_hop }}
+ {% endif %}
+ {% endfor %}
+ {% endif %}
+ {% if routing.bgp.networks is defined %}
+ {% for net in routing.bgp.networks %}
+ network {{ net.network }} mask {{ net.subnet_mask }}
+ {% endfor %}
+ {% endif %}
+{% endif %}

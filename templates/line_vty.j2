@@ -11,4 +11,7 @@ line vty {{ line_vty.range | default('0 4') }}
  {% if line_vty.transport_input is defined %}
  transport input {{ line_vty.transport_input }}
  {% endif %}
+ {% if line_vty.access_class is defined %}
+ access-class {{ line_vty.access_class.name }} {{ line_vty.access_class.direction }}
+ {% endif %}
 {% endif %}

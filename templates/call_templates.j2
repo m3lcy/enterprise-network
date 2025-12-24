@@ -3,13 +3,17 @@
 {% include 'globals.j2' %}
 {% include 'line_vty.j2' %}
 {% include 'vlans.j2' %}
-{% include 'vtp.j2' %}
 {% include 'stp.j2' %}
 {% include 'interfaces.j2' %}
-{% include 'nat.j2' %}
 {% include 'dhcp.j2' %}
 {% include 'ospf.j2' %}
-{% include 'rip.j2' %}
-{% include 'qos.j2' %}
+{% include 'bgp.j2' %}
+{% include 'ip_route.j2' %}
+{% include 'nat.j2' %}
 {% include 'acl.j2' %}
 {% include 'default_gateway.j2' %}
+end
+
+{% if save_config | default(false) %}
+write memory
+{% endif %}

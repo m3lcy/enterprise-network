@@ -9,6 +9,10 @@ interface range {{ intf.name }}
 interface {{ intf.name }}
 {% endif %}
 
+ {% if intf.description is defined %}
+ description {{ intf.description }}
+ {% endif %}
+
  {% if intf.mode is defined %}
  {% if intf.mode == 'routed' %}
  no switchport
@@ -31,12 +35,10 @@ interface {{ intf.name }}
  ip address {{ intf.ip_address }} {{ intf.subnet_mask }}
  {% endif %}
 
- {% if intf.shutdown is defined %}
- {% if intf.shutdown %}
- shutdown
- {% else %}
+ {% if intf.shutdown is defined and intf.shutdown == false %}
  no shutdown
- {% endif %}
+ {% else %}
+ shutdown
  {% endif %}
 
  {% if intf.port_security is defined %}
@@ -56,8 +58,8 @@ interface {{ intf.name }}
  ip helper-address {{ intf.helper_address }}
  {% endif %}
 
- {% if intf.nat_inside is defined and intf.nat_inside %}
- ip nat inside
+ {% if intf.nat_inside is defined and intf.nat_inside == false %}
+ ip nat outside
  {% endif %}
 
  {% if intf.hsrp is defined %}

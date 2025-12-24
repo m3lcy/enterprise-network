@@ -1,14 +1,16 @@
 {# jinja2: trim_blocks=True, lstrip_blocks=True #}
 
-{% if routing is defined and routing.access_lists is defined %}
-{% for acl in routing.access_lists %}
+{% if access_lists is defined %}
+{% for acl in access_lists %}
 ip access-list {{ acl.type }} {{ acl.name }}
- {% for rule in acl.rules %}
- {% if rule.permit is defined %}
- permit {{ rule.permit }} {{ rule.src }} {{ rule.wildcard }} {{ rule.dest | default('any') }}
- {% elif rule.deny is defined %}
- deny {{ rule.deny }} {{ rule.src }} {{ rule.wildcard }} {{ rule.dest | default('any') }}
+{% for entry in acl.entries | default(acl.rules) %}
+ {% if entry.remark is defined %}
+ remark {{ entry.remark }}
+ {% elif entry.permit is defined %}
+ permit {{ entry.permit }} {{ entry.src | default('any') }} {{ entry.wildcard | default('') }} {{ entry.dest | default('any') }} {{ entry.port | default('') }}
+ {% elif entry.deny is defined %}
+ deny {{ entry.deny }} {{ entry.src | defualt('any') }} {{ entry.wildcard | defualt('') }} {{ entry.dest | default('any') }} {{ entry.port | default('') }}
  {% endif %}
- {% endfor %}
+{% endfor %}
 {% endfor %}
 {% endif %}

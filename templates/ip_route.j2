@@ -1,0 +1,7 @@
+{# jinja2: trim_blocks=True, lstrip_blocks=True #}
+
+{% if routing.ip_route is defined %}
+{% for route in routing.ip_route %}
+ip route {{ route.network}} {{ route.subnet_mask }} {{ route.serial }}
+{% endfor %}
+{% endif %}
