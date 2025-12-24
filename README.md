@@ -2,19 +2,19 @@
 This network is designed to ensure continuous connectivity between the branch office (NYC) and central office (SF) with built-in redundancy and failover mechanisms to maintain uninterrupted operations for critical workloads. <br/>
 ##
 
-**Figure 3.11: Main Topology**
+**Figure 3.1: Overall Network Topology**
 
-![image](https://github.com/user-attachments/assets/29e34b99-1105-413d-b282-71f13fa60433)
-
-
-**Figure 3.12: VLAN Segmentation - High Performance Computing VLANs**
-
-![image](https://github.com/user-attachments/assets/f2408ec4-0ca7-4c90-9eff-c22db12c8574)
+![alt text](image-3.png)
 
 
-**Figure 3.13: VLAN Segmentation - General Access VLANs**
+**Figure 3.2: Critical VLANS on Dedicated Access Switches (VLAN 10/20/30)**
 
-![image](https://github.com/user-attachments/assets/6fe4f79a-0f5d-4777-b47a-89dee45562ee)
+![alt text](image-4.png)
+
+
+**Figure 3.3: User & Guest VLANs on Shared Access Switch (VLAN 100/200/300)**
+
+![alt text](image-5.png)
 
 ##
 
