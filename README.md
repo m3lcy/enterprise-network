@@ -28,9 +28,11 @@ This network is designed to ensure continuous connectivity between the branch of
 - VLAN 10 (Core): Critical infrastructure backbone and core services.
 - VLAN 20 (Management): Dedicated out-of-band management for administrative tasks and automation traffic.
 - VLAN 30 (Compute): High-bandwidth segment dedicated to intensive AI workloads and data processing.
+- VLAN 99 (Native): Implemented a dedicated Native VLAN for all trunk links to mitigate VLAN Hopping and Double-Tagging exploits.
 - VLAN 100 (R&D): Isolated environment for research and development traffic.
 - VLAN 200 (Employee): Secure internal corporate access.
-- VLAN 300 (Guest): Sandboxed segment for external and wireless device connectivity. <br/>
+- VLAN 300 (Guest): Sandboxed segment for external and wireless device connectivity. 
+- VLAN 999 (Blackhole): All unused ports are administratively disabled and assigned to a non-routed "Blackhole" VLAN to prevent unauthorized physical access. <br/>
 
 **Infrastructure as Code (Iac) & Automation** <br/>
 - Ansible Orchestration: Full lifecycle management of network devices via Ansible Playbooks.
