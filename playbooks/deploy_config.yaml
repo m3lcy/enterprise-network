@@ -35,31 +35,21 @@
         msg: "Invalid mode '{{ deploy_mode }}'. Must be 'dry-run' or 'commit'."
       when: deploy_mode not in ['dry-run', 'commit']
 
-    - name: Enforce safe default - block accidental applies
-      ansible.builtin.fail:
-        msg: |
-          UNSAFE EXECUTION BLOCKED
-
-          To preview changes (recommended):
-            ansible-playbook ... --check --diff --limit <host>
-
-          To actually apply and save changes:
-            ansible-playbook ... --extra-vars "deploy_mode=commit" --diff --limit <host>
-      when: not ansible_check_mode and deploy_mode != 'commit'
-
   tasks:
     - block:
 
-        - name: Set timestamp per host
+        - name: Set path variables and timestamp
           ansible.builtin.set_fact:
             timestamp: "{{ lookup('pipe', 'date +%Y%m%d_%H%M%S') }}"
+            current_config_path: "{{ output_dir }}/config_{{ lookup('pipe', 'date +%Y%m%d_%H%M%S') }}.cfg"
 
         - name: Render config template to file
           ansible.builtin.template:
             src:  "{{ playbook_dir }}/../templates/call_templates.j2"
-            dest: "{{ output_dir }}/config_{{ timestamp }}.cfg"
+            dest: "{{ current_config_path }}"
             backup: yes
-          register: render_result
+          register: rendered_result
+          check_mode: no
 
         - name: Debug rendered file
           ansible.builtin.stat:
@@ -75,16 +65,17 @@
 
         - name: Preview or Push config to device
           cisco.ios.ios_config:
-            src: "{{ render_result.dest }}"
+            src: "{{ current_config_path }}"
             backup: yes
             diff_against: running
             save_when: "{{ 'modified' if deploy_mode == 'commit' else 'never' }}"
+          check_mode: "{{ true if deploy_mode == 'dry-run' else false }}"
           register: push_result
 
         - name: Display diff for review 
           ansible.builtin.debug:
-            msg: "{{ push_result.diff }} | default('No differences detected')"
-          when: ansible_check_mode
+            msg: "{{ push_result.diff | default('No differences detected') }}"
+          when: deploy_mode == 'dry-run'
 
         - name: Log Push/Preview result
           ansible.builtin.lineinfile:
