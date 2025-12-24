@@ -18,33 +18,33 @@ This network is designed to ensure continuous connectivity between the branch of
 
 ##
 
-**High Availability and Redundancy** <br/>
-- WAN connectivity with NAT ensures seamless branch to central communication, even during network disruptions.
-- Primary and secondary Layer 3 switches with HSRP provide automatic failover.
-- Spanning Tree Protocol (STP) ensures loop-free fault tolerant connectivity. 
-- Dynamic routing protocols (OSPF, RIP) allow the network to adapt to changes and maintain resilient routing. <br/>
+**High Availability and Edge Intelligence** <br/>
+- Multi-Protocol Routing: Integrated eBGP for robust WAN/Edge peering and OSPF for internal link-state routing ensuring high-speed convergence.
+- Gateway Redundancy: Primary and secondary Layer 3 switches utilizing HSRP for transparent sub-second failover.
+- Resilient Switching: Optimized STP (Spanning Tree) configuration to ensure a loop-free, fault-tolerant topology. 
+- Intelligent NAT: Scalable Network Address Translation (NAT) for seamless branch-to-headquarters communication. <br/>
 
 **Optimized Traffic Segmentation** <br/> 
-- Core VLAN (10): Essential network functions.
-- Management VLAN (20): Administrative tasks and monitoring.
-- Compute VLAN (30): Prioritized AI workloads with QoS for low-latency and high bandwidth data processing.
-- R&D (100): Supports research and development traffic.
-- Employee (200): Provides internal employee network access.
-- Guest (300): Supports external and wireless device connectivity. <br/>
-  **Port security restricts unauthorized device access, ensuring secure segmentation.** <br/>
+- VLAN 10 (Core): Critical infrastructure backbone and core services.
+- VLAN 20 (Management): Dedicated out-of-band management for administrative tasks and automation traffic.
+- VLAN 30 (Compute): High-bandwidth segment dedicated to intensive AI workloads and data processing.
+- VLAN 100 (R&D): Isolated environment for research and development traffic.
+- VLAN 200 (Employee): Secure internal corporate access.
+- VLAN 300 (Guest): Sandboxed segment for external and wireless device connectivity. <br/>
 
-**Automation & Templates** <br/>
-- Ansible is used to automate configurations for various protocols and routing.
-- Jinja2 templates dynamically generate device configurations, reducing manual effort and ensuring consistency.
-- Automated logging and configuration deployment allow the network to be managed efficiently while preventing errors from manual configuration. <br/>
+**Infrastructure as Code (Iac) & Automation** <br/>
+- Ansible Orchestration: Full lifecycle management of network devices via Ansible Playbooks.
+- Dynamic Templating: Advanced Jinja2 templates used to generate vendor-agnostic configurations from centralized YAML data models.
+- Standardized Deployment: Automated configuration pushes ensure 100% consistency across the fabric, eliminating manual CLI errors. <br/>
 
-**Security & Management** <br/>
-- ACLs, SSH, VTP, NAT, Port Security etc. are used to enforce security and external access. <br/>
-- All sensitive credentials (device passwords, enable secret etc.) are encrypted using **Ansible Vault**.
+**Advanced Security & Management** <br/>
+- Management Plane Protection: Restricted SSH access via VTY Access Control Lists (ACLs), ensuring only authorized automation nodes (VLAN 20) can modify device state.
+- Port-Level Security: Hardware-level port security to prevent MAC spoofing and unauthorized physical access.
+- Secure Credentialing: All sensitive variables (secrets, enable passwords) are fully encrypted using Ansible Vault. <br/>
 
 **Future-Proof Design** <br/>
-- VLAN segmentation, distributed routing, loop-prevention, and security policies enable scalable growth.
-- Supports evolving workloads and additional research teams without performance compromise. <br/>
+- Distributed Architecture: Built for horizontal scaling, allowing for the addition of new research teams or compute clusters without re-addressing the core.
+- Zero-Trust Foundation: Rigid VLAN isolation and security policies provide the framework for a secure, scalable enterprise network. <br/>
 
 ##
 
@@ -61,7 +61,7 @@ Enterprise-Network/
 
 # Setup
 
-## Clone and Setup
+## Clone and Enter
 ```bash
 git clone git@github.com:m3lcy/Enterprise-Network.git
 cd Enterprise-Network
@@ -74,16 +74,16 @@ pip install ansible ansible-pylibssh
 ```
 
 # Usage
-
+(Use **cisco** as Vault Pass)
 ## Preview/Dry-run 
 ```bash
-ansible-playbook playbooks/deploy_config.yaml -i inventory/hosts.yaml --check --diff --limit l3-sw-01 --ask-vault-pass
+ansible-playbook playbooks/deploy_config.yaml -l l3-sw-01 --diff --check --ask-vault-pass
 ```
 
 ## Commit/Apply
 ```bash
-ansible-playbook playbooks/deploy_config.yaml -i inventory/hosts.yaml --extra-vars "deploy_mode=commit" --diff --limit l3-sw-01 --ask-vault-pass
+ansible-playbook playbooks/deploy_config.yaml -l l3-sw-01  -e "deploy_mode=commit" --diff  --ask-vault-pass
 ```
 
 **TechStack** <br/>
-**Ansible**, **Jinja2**, **YAML**, **OSPF**, **DHCP**, **QOS**, **VLANS**, **HSRP**, **NAT**, **Port Security**, **RIP**, **ACLs**, **STP**, **VTP**, **SSH**
+**Ansible**, **Jinja2**, **YAML**, **OSPF**, **BGP**, **IP ROUTING**, **DHCP**, **VLANS**, **HSRP**, **NAT**, **Port Security**, **ACLs**, **STP**, **SSH**
