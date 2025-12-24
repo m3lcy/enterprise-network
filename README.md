@@ -16,7 +16,6 @@ This network is designed to ensure continuous connectivity between the branch of
 
 <img width="596" height="759" alt="image" src="https://github.com/user-attachments/assets/f442313f-fb84-4dd1-b653-d7a98a606441" />
 
-
 ##
 
 **High Availability and Edge Intelligence** <br/>
