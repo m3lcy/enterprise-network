@@ -5,26 +5,30 @@ line_vty:
   password: "{{ vty_password }}"
   login: local
   transport_input: ssh
-
-vtp:
-  mode: client
-  domain: BRANCH_NYC
-  version: 2
+  access_class:
+    name: MGMT_VTY_ACL
+    direction: in
 
 stp:
   mode: pvst
 
+vlans: 
+  - { id: 20, name: MGMT }
+  - { id: 30, name: COMPUTE }
+  - { id: 99, name: NATIVE }
+  - { id: 999, name: BLACKHOLE }
+
 interfaces:
   - name: FastEthernet0/1
+    description: "TRUNK TO l3-sw-02 fa0/4"
     mode: trunk
     native_vlan: 99 
-    mls_qos_trust_cos: true
     shutdown: false
 
   - name: FastEthernet0/2
+    description: "COMPUTE-USER-08"
     mode: access
     access_vlan: 30
-    mls_qos_cos: 5
     shutdown: false
     port_security:
       enabled: true
@@ -33,9 +37,9 @@ interfaces:
       sticky: true
 
   - name: FastEthernet0/3
+    description: "COMPUTE-USER-09"
     mode: access
     access_vlan: 30
-    mls_qos_cos: 5
     shutdown: false
     port_security:
       enabled: true
@@ -44,9 +48,9 @@ interfaces:
       sticky: true
 
   - name: FastEthernet0/4
+    description: "COMPUTE-USER-10"
     mode: access
     access_vlan: 30
-    mls_qos_cos: 5
     shutdown: false
     port_security:
       enabled: true
@@ -55,9 +59,9 @@ interfaces:
       sticky: true
 
   - name: FastEthernet0/5
+    description: "COMPUTE-USER-11"
     mode: access
     access_vlan: 30
-    mls_qos_cos: 5
     shutdown: false
     port_security:
       enabled: true
@@ -66,24 +70,40 @@ interfaces:
       sticky: true
 
   - name: FastEthernet0/6-24
+    description: "SPARE / RESERVED FOR FUTURE USE"
     mode: access
     access_vlan: 999
     shutdown: true
 
   - name: GigabitEthernet0/1
+    description: "TRUNK TO l3-sw-01 fa0/5"
     mode: trunk
     native_vlan: 99
-    mls_qos_trust_cos: true
     shutdown: false
 
   - name: GigabitEthernet0/2
+    description: "SPARE / RESERVED FOR FUTURE USE"
     mode: access
     access_vlan: 999
     shutdown: true
 
   - name: VLAN1
-    ip_address: 192.168.12.40
+    shutdown: true
+
+  - name: VLAN20
+    description: "MANAGEMENT INTERFACE"
+    ip_address: 172.16.12.42
     subnet_mask: 255.255.255.224
     shutdown: false
+
+access_lists:
+  - name: MGMT_VTY_ACL
+    type: extended
+    entries:
+      - { remark: "RESTRICT SSH MANAGEMENT ACCESS" }
+      - { remark: "ONLY ALLOW FROM MANAGEMENT VLAN 20" }
+      - { permit: tcp, src: 172.16.12.32, wildcard: 0.0.0.31, dest: any, port: "eq 22" }
+      - { remark: "ALLOW OTHER TRAFFIC" }
+      - { permit: ip, src: any, dest: any }
 
 default_gateway: 172.16.12.98

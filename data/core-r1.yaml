@@ -5,12 +5,22 @@ line_vty:
   password: "{{ vty_password }}"
   login: local
   transport_input: ssh
+  access_class:
+    name: MGMT_VTY_ACL
+    direction: in
 
 stp:
   mode: pvst
 
 interfaces:
+  - name: Loopback0
+    description: "LOOPBACK - SSH / BGP"
+    ip_address: 172.16.255.1 
+    subnet_mask: 255.255.255.255
+    shutdown: false
+
   - name: GigabitEthernet0/0
+    description: "UPLINK TO l3-sw-01 g0/1"
     mode: routed
     ip_address: 172.16.12.226
     subnet_mask: 255.255.255.252
@@ -19,6 +29,7 @@ interfaces:
     shutdown: false
 
   - name: GigabitEthernet0/1
+    description: "UPLINK TO l3-sw-02 g0/1" 
     mode: routed
     ip_address: 172.16.12.229
     subnet_mask: 255.255.255.252
@@ -27,6 +38,7 @@ interfaces:
     shutdown: false
 
   - name: Serial0/0/0
+    description: "WAN LINK TO HQ | NAT OUTSIDE"
     mode: routed
     ip_address: 172.17.12.1
     subnet_mask: 255.255.255.0
@@ -35,12 +47,11 @@ interfaces:
     shutdown: false
 
   - name: Serial0/0/1
+    description: "SPARE / UNUSED"
     shutdown: true
 
   - name: VLAN1
-    ip_address: 192.168.12.35
-    subnet_mask: 255.255.255.224
-    shutdown: false
+    shutdown: true
 
 dhcp:
   excluded_addresses:
@@ -91,16 +102,31 @@ routing:
   ospf:
     process_id: 1
     router_id: 1.1.1.1
-    log_adjacency_changes: true
+    default_information_originate: true
     networks:
-      - { network: 172.17.0.0, wildcard: 0.0.255.255, area: 0 }
+      - { network: 172.16.12.224, wildcard: 0.0.0.3, area: 0 }
+      - { network: 172.16.12.228, wildcard: 0.0.0.3, area: 0 }
 
-  rip:
-    version: 2
-    networks: 
-      - 172.16.0.0
-      - 172.17.0.0
-    auto_summary: false
+  bgp:
+    as_number: 65001
+    neighbors:
+      - ip: 172.17.255.1
+        remote_as: 65000
+        update_source: Loopback0
+        multi_hop: 2
+    networks:
+      - { network: 172.16.255.1, subnet_mask: 255.255.255.255 }
+      - { network: 172.16.12.0, subnet_mask: 255.255.255.224 }
+      - { network: 172.16.12.32, subnet_mask: 255.255.255.224 }
+      - { network: 172.16.12.64, subnet_mask: 255.255.255.224 }
+      - { network: 172.16.12.96, subnet_mask: 255.255.255.224 }
+      - { network: 172.16.12.128, subnet_mask: 255.255.255.224 }
+      - { network: 172.16.12.192, subnet_mask: 255.255.255.224 }
+      - { network: 172.16.12.224, subnet_mask: 255.255.255.224 }
+
+  ip_route:
+   - { network: 0.0.0.0, subnet_mask: 0.0.0.0, serial: Serial0/0/0 }
+   - { network: 172.17.255.1, subnet_mask: 255.255.255.255, serial: 172.17.12.2 }
 
 nat:
   inside_source_overload:
@@ -109,7 +135,17 @@ nat:
 
 access_lists:
   - name: 1
+    type: standard
     rules:
       - permit: any
+
+  - name: MGMT_VTY_ACL
+    type: extended
+    entries:
+      - { remark: "RESTRICT SSH MANAGEMENT ACCESS" }
+      - { remark: "ONLY ALLOW FROM MANAGEMENT VLAN 20" }
+      - { permit: tcp, src: 172.16.12.32, wildcard: 0.0.0.31, dest: any, port: "eq 22" }
+      - { remark: "ALLOW OTHER TRAFFIC" }
+      - { permit: ip, src: any, dest: any }
 
 default_gateway: 172.16.12.98

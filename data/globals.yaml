@@ -9,3 +9,5 @@ domain:
   name: "cisco.com"
 
 crypto_rsa_key: "crypto key generate rsa usage-keys label ssh-key modulus 1024"
+
+save_config: true
