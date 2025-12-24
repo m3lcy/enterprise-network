@@ -59,7 +59,7 @@ interfaces:
       sticky: true
 
   - name: FastEthernet0/5
-    descriptiong: "CORE-USER-03"
+    description: "CORE-USER-03"
     mode: access
     access_vlan: 10
     shutdown: false
