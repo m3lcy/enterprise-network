@@ -4,17 +4,18 @@ This network is designed to ensure continuous connectivity between the branch of
 
 **Figure 3.1: Overall Network Topology**
 
-![alt text](image-3.png)
+<img width="1432" height="766" alt="image" src="https://github.com/user-attachments/assets/f5cd5db9-f2e8-4e77-aee7-8aa87bcef6ca" />
 
 
 **Figure 3.2: Critical VLANS on Dedicated Access Switches (VLAN 10/20/30)**
 
-![alt text](image-4.png)
+<img width="821" height="363" alt="image" src="https://github.com/user-attachments/assets/8315a2a8-d197-4406-a6d9-900dc7adf254" />
 
 
 **Figure 3.3: User & Guest VLANs on Shared Access Switch (VLAN 100/200/300)**
 
-![alt text](image-5.png)
+<img width="596" height="759" alt="image" src="https://github.com/user-attachments/assets/f442313f-fb84-4dd1-b653-d7a98a606441" />
+
 
 ##
 
