@@ -20,7 +20,7 @@ This network is designed to ensure continuous connectivity between the branch of
 
 **High Availability and Edge Intelligence** <br/>
 - Multi-Protocol Routing: Integrated eBGP for robust WAN/Edge peering and OSPF for internal link-state routing ensuring high-speed convergence.
-- Gateway Redundancy: Primary and secondary Layer 3 switches utilizing HSRP for transparent sub-second failover.
+- Gateway Redundancy: Primary and secondary Layer 3 switches utilizing VRRP for transparent sub-second failover.
 - Resilient Switching: Optimized STP (Spanning Tree) configuration to ensure a loop-free, fault-tolerant topology. 
 - Intelligent NAT: Scalable Network Address Translation (NAT) for seamless branch-to-headquarters communication. <br/>
 
@@ -88,4 +88,4 @@ ansible-playbook playbooks/deploy_config.yaml -l l3-sw-01  -e "deploy_mode=commi
 ```
 
 **TechStack** <br/>
-**Ansible**, **Jinja2**, **YAML**, **OSPF**, **BGP**, **IP ROUTING**, **DHCP**, **VLANS**, **HSRP**, **NAT**, **Port Security**, **ACLs**, **STP**, **SSH**
+**Ansible**, **Jinja2**, **YAML**, **OSPF**, **BGP**, **IP ROUTING**, **DHCP**, **VLANS**, **VRRP**, **NAT**, **Port Security**, **ACLs**, **STP**, **SSH**
