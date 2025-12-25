@@ -92,12 +92,12 @@ interfaces:
     helper_address: 172.16.12.229
     nat_inside: true
     shutdown: false
-    hsrp:
-      version: 2
-      group: 1
-      ip: 172.16.12.254
-      preempt: true
-
+    vrrp:
+      group: 10
+      ip: 172.16.12.30
+      priority: 100
+      auth_text: "{{ vrrp_auth_text }}"
+      
   - name: VLAN20
     description: "VLAN20 MANAGEMENT"
     ip_address: 172.16.12.34
@@ -105,11 +105,11 @@ interfaces:
     helper_address: 172.16.12.229
     nat_inside: true
     shutdown: false
-    hsrp:
-      version: 2
-      group: 1
-      ip: 172.16.12.254
-      preempt: true
+    vrrp:
+      group: 20
+      ip: 172.16.12.62
+      priority: 100
+      auth_text: "{{ vrrp_auth_text }}"
     
   - name: VLAN30
     description: "VLAN30 COMPUTE"
@@ -118,25 +118,11 @@ interfaces:
     helper_address: 172.16.12.229
     nat_inside: true
     shutdown: false
-    hsrp:
-      version: 2
-      group: 1
-      ip: 172.16.12.254
-      preempt: true
-
-  - name: VLAN99
-    description: "NATIVE VLAN"
-    ip_address: 172.16.12.98
-    subnet_mask: 255.255.255.224
-    helper_address: 172.16.12.226
-    nat_inside: true
-    shutdown: false
-    hsrp: 
-      version: 2
-      group: 1
-      ip: 172.16.12.254
-      priority: 150
-      preempt: true
+    vrrp:
+      group: 30
+      ip: 172.16.12.94
+      priority: 100
+      auth_text: "{{ vrrp_auth_text }}"
 
   - name: VLAN100
     description: "VLAN100 R&D"
@@ -145,6 +131,11 @@ interfaces:
     helper_address: 172.16.12.226
     nat_inside: true
     shutdown: false
+    vrrp:
+      group: 100
+      ip: 172.16.12.158
+      priority: 100
+      auth_text: "{{ vrrp_auth_text }}"
 
   - name: VLAN200
     description: "VLAN200 EMPLOYEE"
@@ -153,6 +144,11 @@ interfaces:
     helper_address: 172.16.12.226
     nat_inside: true
     shutdown: false
+    vrrp: 
+      group: 200
+      ip: 172.16.12.190
+      priority: 100
+      auth_text: "{{ vrrp_auth_text }}"
 
   - name: VLAN300
     description: "VLAN300 GUEST"
@@ -161,7 +157,11 @@ interfaces:
     helper_address: 172.16.12.226
     nat_inside: true
     shutdown: false
-
+    vrrp:
+      group: 300
+      ip: 172.16.12.222
+      priority: 100
+      auth_text: "{{ vrrp_auth_text }}"
 
 routing:
   ospf:
