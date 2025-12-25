@@ -62,29 +62,20 @@ interface {{ intf.name }}
  ip nat outside
  {% endif %}
 
- {% if intf.hsrp is defined %}
- {% if intf.hsrp.group is defined and intf.hsrp.ip is defined %}
- standby {{ intf.hsrp.group }} ip {{ intf.hsrp.ip }}
+ {% if intf.vrrp is defined and intf.vrrp.group is defined %}
+ {% if intf.vrrp.ip is defined %}
+ vrrp {{ intf.vrrp.group }} ip {{ intf.vrrp.ip }}
  {% endif %}
- {% if intf.hsrp.version is defined %}
- standby version {{ intf.hsrp.version }}
+ vrrp {{ intf.vrrp.group }} priority {{ intf.vrrp.priority | default(100) }}
+ {% if intf.vrrp.auth_text is defined %}
+ vrrp {{ intf.vrrp.group }} authentication text {{ intf.vrrp.auth_text }}
+ {% else %}
+  ! WARNING: VRRP authentication missing for {{ intf.name }}
  {% endif %}
- {% if intf.hsrp.priority is defined and intf.hsrp.group is defined %}
- standby {{ intf.hsrp.group }} priority {{ intf.hsrp.priority }}
- {% endif %}
- {% if intf.hsrp.preempt is defined and intf.hsrp.preempt %}
- standby {{ intf.hsrp.group }} preempt
+ {% if intf.vrrp.is_primary is defined and intf.vrrp.is_primary == true %}
+ vrrp {{ intf.vrrp.group }} preempt delay minimum 60
  {% endif %}
  {% endif %}
 
- {% if intf.mls_qos_cos is defined %}
- mls qos cos {{ intf.mls_qos_cos }}
- {% endif %}
- {% if intf.service_policy_input is defined %}
- service-policy input {{ intf.service_policy_input }}
- {% endif %}
- {% if intf.service_policy_output is defined %}
- service-policy output {{ intf.service_policy_output }}
- {% endif %}
 {% endfor %}
 {% endif %}
