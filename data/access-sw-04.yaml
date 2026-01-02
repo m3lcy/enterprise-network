@@ -21,12 +21,6 @@ vlans:
   - { id: 999, name: BLACKHOLE }
 
 interfaces:
-  - name: Loopback0
-    description: "LOOPBACK - SSH / BGP"
-    ip_address: 172.16.255.7
-    subnet_mask: 255.255.255.255
-    shutdown: false
-
   - name: FastEthernet0/1
     description: TRUNK TO l3-sw-01 fa0/6
     mode: trunk
