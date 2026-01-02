@@ -51,8 +51,7 @@ This network is designed to ensure continuous connectivity between the branch of
 ##
 
 ```bash
-Enterprise-Network/
-├── CiscoIOS/          → Backups of current running-configs
+enterprise-network/
 ├── data/              → Host devices YAML data configurations
 ├── inventory/         → Ansible inventory and host_vars (encrypted ansible vault)
 ├── logs/              → Per-device and run logs
@@ -65,8 +64,8 @@ Enterprise-Network/
 
 ## Clone and Enter
 ```bash
-git clone git@github.com:m3lcy/Enterprise-Network.git
-cd Enterprise-Network
+git clone git@github.com:m3lcy/enterprise-network.git
+cd enterprise-network
 ```
 
 ## (Optional) Create a Python virtual environment
@@ -76,7 +75,6 @@ pip install ansible ansible-pylibssh
 ```
 
 # Usage
-(Use **cisco** as Vault Pass)
 ## Preview/Dry-run 
 ```bash
 ansible-playbook playbooks/deploy_config.yaml -l l3-sw-01 --diff --check --ask-vault-pass
