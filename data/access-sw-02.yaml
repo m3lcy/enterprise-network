@@ -25,7 +25,7 @@ interfaces:
     shutdown: false
 
   - name: FastEthernet0/2
-    description: "MGMT-USER-04"
+    description: "UPLINK TO MGMT-USER-04"
     mode: access
     access_vlan: 20
     shutdown: false
@@ -36,7 +36,7 @@ interfaces:
       sticky: true
 
   - name: FastEthernet0/3
-    description: "MGMT-USER-07"
+    description: "UPLINK TO MGMT-USER-07"
     mode: access
     access_vlan: 20
     shutdown: false
@@ -47,7 +47,7 @@ interfaces:
       sticky: true
 
   - name: FastEthernet0/4
-    description: "MGMT-USER-05"
+    description: "UPLINK TO MGMT-USER-05"
     mode: access
     access_vlan: 20
     shutdown: false
@@ -58,7 +58,7 @@ interfaces:
       sticky: true
 
   - name: FastEthernet0/5
-    description: "MGMT-USER-06"
+    description: "UPLINK TO MGMT-USER-06"
     mode: access
     access_vlan: 20
     shutdown: false

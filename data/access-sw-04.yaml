@@ -28,21 +28,25 @@ interfaces:
     shutdown: false
 
   - name: FastEthernet0/1
+    description: TRUNK TO l3-sw-01 fa0/6
     mode: trunk
     native_vlan: 99 
     shutdown: false
 
   - name: FastEthernet0/2
+    description: TRUNK TO l3-sw-02 fa0/5
     mode: trunk
     native_vlan: 99
     shutdown: false
 
   - name: FastEthernet0/3
+    description: UPLINK TO ap-0
     mode: access
     access_vlan: 300
     shutdown: false
 
   - name: FastEthernet0/12
+    description: UPLINK TO EMPLOYEE-USER-15
     mode: access
     access_vlan: 200
     shutdown: false
@@ -53,6 +57,7 @@ interfaces:
       sticky: true
 
   - name: FastEthernet0/13
+    description: UPLINK TO EMPLOYEE-USER-16
     mode: access
     access_vlan: 200
     shutdown: false
@@ -63,6 +68,7 @@ interfaces:
       sticky: true
 
   - name: FastEthernet0/14
+    description: UPLINK TO EMPLOYEE-USER-14
     mode: access
     access_vlan: 200
     shutdown: false
@@ -73,6 +79,7 @@ interfaces:
       sticky: true
 
   - name: FastEthernet0/15
+    description: UPLINK TO EMPLOYEE-USER-13
     mode: access
     access_vlan: 200
     shutdown: false
@@ -83,16 +90,19 @@ interfaces:
       sticky: true
 
   - name: FastEthernet0/4-11
+    description: SPARE / RESERVED FOR FUTURE USE
     mode: access
     access_vlan: 999
     shutdown: true
 
   - name: FastEthernet0/16-20
+    description: SPARE / RESERVED FOR FUTURE USE
     mode: access
     access_vlan: 999
     shutdown: true
 
   - name: FastEthernet0/21
+    description: UPLINK TO R&D-USER-17
     mode: access
     access_vlan: 100
     shutdown: false
@@ -103,6 +113,7 @@ interfaces:
       sticky: true
 
   - name: FastEthernet0/22
+    description: UPLINK TO R&D-USER-18
     mode: access
     access_vlan: 100
     shutdown: false
@@ -113,6 +124,7 @@ interfaces:
       sticky: true
 
   - name: FastEthernet0/23
+    description: UPLINK TO R&D-USER-19
     mode: access
     access_vlan: 100
     shutdown: false
@@ -123,6 +135,7 @@ interfaces:
       sticky: true
 
   - name: FastEthernet0/24
+    description: UPLINK TO R&D-USER-12
     mode: access
     access_vlan: 100
     shutdown: false
@@ -133,11 +146,13 @@ interfaces:
       sticky: true
 
   - name: GigabitEthernet0/1
+    description: SPARE / RESERVED FOR FUTURE USE
     mode: access
     native_vlan: 999
     shutdown: true
 
   - name: GigabitEthernet0/2
+    description: SPARE / RESERVED FOR FUTURE USE
     mode: access
     access_vlan: 999
     shutdown: true
